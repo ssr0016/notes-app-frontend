@@ -3,7 +3,13 @@ import TagInput from "../../components/Input/TagInput";
 import { useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 
-function AddEditNotes({ noteData, type, getAllNotes, onClose }) {
+function AddEditNotes({
+  noteData,
+  type,
+  getAllNotes,
+  onClose,
+  showToastMessage,
+}) {
   const [title, setTitle] = useState(noteData?.title || "");
   const [content, setContent] = useState(noteData?.content || "");
   const [tags, setTags] = useState(noteData?.tags || []);
@@ -20,6 +26,7 @@ function AddEditNotes({ noteData, type, getAllNotes, onClose }) {
       });
 
       if (response.data && response.data.note) {
+        showToastMessage("Note added successfully");
         getAllNotes();
         onClose();
       }
@@ -46,6 +53,7 @@ function AddEditNotes({ noteData, type, getAllNotes, onClose }) {
       });
 
       if (response.data && response.data.note) {
+        showToastMessage("Note updated successfully");
         getAllNotes();
         onClose();
       }

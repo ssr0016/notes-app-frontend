@@ -7,12 +7,19 @@ import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import moment from "moment";
+import ToastMessage from "../../components/ToastMessage/ToastMessage";
 
 function Home() {
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShow: false,
     type: "add",
     data: null,
+  });
+
+  const [showToastMsg, setShowToastMsg] = useState({
+    isShow: false,
+    message: "",
+    type: "add",
   });
 
   const [allNotes, setAllNotes] = useState([]);
@@ -25,6 +32,22 @@ function Home() {
       isShow: true,
       data: noteDetails,
       type: "edit",
+    });
+  };
+
+  const showToastMessage = (message, type) => {
+    setShowToastMsg({
+      isShow: true,
+      message,
+      type,
+    });
+  };
+
+  const handleCloseToast = () => {
+    setShowToastMsg({
+      isShow: false,
+      message: "",
+      type: "add",
     });
   };
 
@@ -54,6 +77,8 @@ function Home() {
       console.log("An unexpected error occurred. Please try again.");
     }
   };
+
+  // Delete Note
 
   useEffect(() => {
     getAllNotes();
@@ -120,8 +145,15 @@ function Home() {
             setOpenAddEditModal({ isShow: false, type: "add", data: null });
           }}
           getAllNotes={getAllNotes}
+          showToastMessage={showToastMessage}
         />
       </Modal>
+      <ToastMessage
+        isShow={showToastMsg.isShow}
+        message={showToastMsg.message}
+        type={showToastMsg.type}
+        onClose={handleCloseToast}
+      />
     </>
   );
 }
